@@ -56,3 +56,8 @@ class MovieService:
 
         return movies
 
+    def delete_movie(self, movie_id):
+        movie = self.get_movie(movie_id=movie_id)
+        self.session.delete(movie)
+        self.session.commit()
+

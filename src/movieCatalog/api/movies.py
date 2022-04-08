@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response, status
 
 from ..models.movies import MovieCreate, Movie
 from ..services.movies import MovieService
@@ -31,3 +31,12 @@ def get_movie_by_id(
         service: MovieService = Depends()
 ):
     return service.get_movie(movie_id=movie_id)
+
+
+@router.delete('/{movie_id}')
+def delete_movie_from_collection(
+        movie_id: int,
+        service: MovieService = Depends()
+):
+    service.delete_movie(movie_id=movie_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
