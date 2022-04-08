@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
@@ -31,3 +33,26 @@ class MovieService:
         self.session.commit()
 
         return movie
+
+    def get_movie(self, movie_id: int) -> tables.Movie:
+        movie = (
+            self.session
+            .query(tables.Movie)
+            .filter_by(id=movie_id)
+            .first()
+        )
+
+        if not movie:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+        return movie
+
+    def get_movies(self) -> List[tables.Movie]:
+        movies = (
+            self.session
+            .query(tables.Movie)
+            .all()
+        )
+
+        return movies
+
