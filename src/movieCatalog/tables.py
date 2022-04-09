@@ -13,7 +13,7 @@ movies_and_genres = Table('movies_and_genres', Base.metadata,
 
 favorite_movies_list = Table('favorite_movies_list', Base.metadata,
                              Column('author_id', ForeignKey('users.id'), primary_key=True),
-                             Column('movie_id', ForeignKey('movies.id'), primary_key=True)
+                             Column('movies_id', ForeignKey('movies.id'), primary_key=True)
                              )
 
 
@@ -26,7 +26,9 @@ class User(Base):
     name = sa.Column(sa.Text)
     password_hash = sa.Column(sa.Text)
     favorite_movies = relationship("Movie",
-                                   secondary=favorite_movies_list)
+                                   secondary=favorite_movies_list,
+                                   back_populates="favorite_lists",
+                                   )
 
 
 class Movie(Base):
@@ -40,7 +42,11 @@ class Movie(Base):
     fees = sa.Column(sa.Integer)
     genres = relationship("Genre",
                           secondary=movies_and_genres)
-    reviews = relationship("Review")
+    reviews = relationship("Review", cascade="all, delete")
+    favorite_lists = relationship("User",
+                                  secondary=favorite_movies_list,
+                                  back_populates="favorite_movies",
+                                  )
 
 
 class Genre(Base):
@@ -56,5 +62,5 @@ class Review(Base):
     id = sa.Column(sa.Integer, primary_key=True)
     reviewText = sa.Column(sa.Text)
     rating = sa.Column(sa.Integer, nullable=False)
-    authorId = sa.Column(sa.Integer, sa.ForeignKey('users.id', ondelete='CASCADE', onupdate='CASCADE'))
-    movieId = sa.Column(sa.Integer, sa.ForeignKey('movies.id', ondelete='CASCADE', onupdate='CASCADE'))
+    authorId = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
+    movieId = sa.Column(sa.Integer, sa.ForeignKey('movies.id'))
