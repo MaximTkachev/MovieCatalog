@@ -6,7 +6,8 @@ from ..models.movies import MovieCreate, Movie
 from ..services.movies import MovieService
 
 router = APIRouter(
-    prefix="/movies"
+    prefix="/movies",
+    tags=['Movies']
 )
 
 

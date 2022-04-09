@@ -12,7 +12,7 @@ from ..services.auth import get_current_user
 
 router = APIRouter(
     prefix='/auth',
-    tags=['auth']
+    tags=['Auth']
 )
 
 

@@ -6,7 +6,8 @@ from movieCatalog.models.genres import Genre, GenreCreate
 from movieCatalog.services.genres import GenreService
 
 router = APIRouter(
-    prefix="/genres"
+    prefix="/genres",
+    tags=['Genres']
 )
 
 
