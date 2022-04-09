@@ -90,7 +90,8 @@ class AuthService:
             username=user_data.username,
             email=user_data.email,
             name=user_data.name,
-            password_hash=self.hash_password(user_data.password)
+            password_hash=self.hash_password(user_data.password),
+            favorite_movies=[]
         )
         self.session.add(user)
         self.session.commit()

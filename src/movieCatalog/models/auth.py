@@ -1,4 +1,8 @@
+from typing import List
+
 from pydantic import BaseModel
+
+from movieCatalog.models.movies import Movie
 
 
 class BaseUser(BaseModel):
@@ -13,6 +17,7 @@ class UserCreate(BaseUser):
 
 class User(BaseUser):
     id: int
+    favorite_movies: List[Movie] = []
 
     class Config:
         orm_mode = True
