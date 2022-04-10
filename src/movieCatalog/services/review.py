@@ -14,6 +14,10 @@ class ReviewService:
 
     def create_review(self, review_data: CreateReview,
                       user_id: int, movie_id: int):
+        if review_data.rating < 0 or review_data.rating > 10:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Incorrect rating value")
+        
         review = tables.Review(
             reviewText=review_data.reviewText,
             rating=review_data.rating,
