@@ -47,13 +47,16 @@ class MovieService:
 
         return movie
 
-    def get_movies(self) -> List[tables.Movie]:
+    def get_movies(self, name_template: str) -> List[tables.Movie]:
         movies = (
             self.session
             .query(tables.Movie)
-            .all()
         )
 
+        if name_template:
+            movies = movies.filter(tables.Movie.name.like('%' + name_template + '%'))
+
+        movies = movies.all()
         return movies
 
     def delete_movie(self, movie_id):
