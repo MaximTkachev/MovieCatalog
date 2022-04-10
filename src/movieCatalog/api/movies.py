@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Response, status
 
@@ -24,9 +24,10 @@ def create_movie(
 
 @router.get('/', response_model=List[Movie])
 def get_list_of_movies(
+        name: Optional[str] = None,
         service: MovieService = Depends()
 ):
-    return service.get_movies()
+    return service.get_movies(name_template=name)
 
 
 @router.get('/{movie_id}', response_model=Movie)
