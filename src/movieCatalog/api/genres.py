@@ -2,7 +2,9 @@ from typing import List
 
 from fastapi import APIRouter, Depends, Response, status
 
+from movieCatalog.models.auth import User
 from movieCatalog.models.genres import Genre, GenreCreate
+from movieCatalog.services.auth import get_current_user
 from movieCatalog.services.genres import GenreService
 
 router = APIRouter(
@@ -14,6 +16,7 @@ router = APIRouter(
 @router.post('/', response_model=Genre)
 def create_genre(
         genre_data: GenreCreate,
+        user: User = Depends(get_current_user),
         service: GenreService = Depends()
 ):
     return service.create(genre_data=genre_data)
@@ -35,6 +38,7 @@ def gen_genre(
 @router.delete('/{genre_id}')
 def delete_genre(
         genre_id: int,
+        user: User = Depends(get_current_user),
         service: GenreService = Depends()
 ):
     service.delete_genre(genre_id=genre_id)
