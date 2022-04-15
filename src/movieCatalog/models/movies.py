@@ -11,7 +11,6 @@ class MovieBase(BaseModel):
     country: Optional[str]
     budget: Optional[int]
     fees: Optional[int]
-    genres: List[int] = []
 
 
 class Movie(MovieBase):
@@ -23,13 +22,12 @@ class Movie(MovieBase):
 
 
 class MovieCreate(MovieBase):
-    pass
-
-
-class MovieUpdate(MovieBase):
-    name: Optional[str]
-    genres: List[int]
+    genres: List[int] = []
 
 
 class Rating(BaseModel):
     value: float
+
+
+class MovieEdit(BaseModel):
+    name: Optional[str]
