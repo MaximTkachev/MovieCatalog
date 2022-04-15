@@ -25,14 +25,14 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     return AuthService.validate_token(token)
 
 
+def hash_password(password: str) -> str:
+    return bcrypt.hash(password)
+
+
 class AuthService:
     @classmethod
     def verify_password(cls, plain_password: str, hashed_password: str) -> bool:
         return bcrypt.verify(plain_password, hashed_password)
-
-    @classmethod
-    def hash_password(cls, password: str) -> str:
-        return bcrypt.hash(password)
 
     @classmethod
     def validate_token(cls, token: str) -> User:
@@ -90,7 +90,7 @@ class AuthService:
             username=user_data.username,
             email=user_data.email,
             name=user_data.name,
-            password_hash=self.hash_password(user_data.password),
+            password_hash=hash_password(user_data.password),
             favorite_movies=[]
         )
         self.session.add(user)

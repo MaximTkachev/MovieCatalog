@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -21,6 +21,20 @@ class User(BaseUser):
 
     class Config:
         orm_mode = True
+
+
+class UserData(BaseUser):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class UserEdit(BaseModel):
+    username: Optional[str]
+    email: Optional[str]
+    name: Optional[str]
+    password: Optional[str]
 
 
 class Token(BaseModel):

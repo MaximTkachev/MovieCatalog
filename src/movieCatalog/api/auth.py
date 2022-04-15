@@ -31,7 +31,3 @@ def login_a_user_into_system(
         form_data.password
     )
 
-
-@router.get('/user', response_model=User)
-def get_user(user: User = Depends(get_current_user)):
-    return user
