@@ -29,5 +29,5 @@ class Rating(BaseModel):
     value: float
 
 
-class MovieEdit(BaseModel):
+class MovieEdit(MovieBase):
     name: Optional[str]
