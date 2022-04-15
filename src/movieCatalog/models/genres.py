@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -18,3 +20,8 @@ class GenreCreate(GenreBase):
 
 class GenreUpdate(GenreBase):
     pass
+
+
+class GenreEdit(BaseModel):
+    name: Optional[str]
+    
