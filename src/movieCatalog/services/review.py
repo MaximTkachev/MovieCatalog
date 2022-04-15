@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, status
 
 from movieCatalog import tables
 from movieCatalog.database import Session, get_session
-from movieCatalog.models.review import CreateReview
+from movieCatalog.models.review import CreateReview, ReviewUpdate
 from movieCatalog.tables import Review
 
 
@@ -53,3 +53,13 @@ class ReviewService:
         )
 
         return reviews
+
+    def edit_review(self, review_id: int, author_id: int, review_data: ReviewUpdate) -> Review:
+        review = self.get_review(review_id=review_id)
+        if review.authorId != author_id:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        for field, value in review_data:
+            if value is not None:
+                setattr(review, field, value)
+        self.session.commit()
+        return review

@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, Response, status
 
 from ..models.auth import User
-from ..models.review import CreateReview, Review
+from ..models.review import CreateReview, Review, ReviewUpdate
 from ..services.auth import get_current_user
 from ..services.review import ReviewService
 
@@ -50,3 +50,13 @@ def remove_review_to_film(
 ):
     service.delete_review(review_id=review_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.put('/{review_id}', response_model=Review)
+def edit_review(
+        review_id: int,
+        review_data: ReviewUpdate,
+        user: User = Depends(get_current_user),
+        service: ReviewService = Depends()
+):
+    return service.edit_review(review_id=review_id, author_id=user.id, review_data=review_data)
