@@ -29,3 +29,7 @@ class MovieCreate(MovieBase):
 class MovieUpdate(MovieBase):
     name: Optional[str]
     genres: List[int]
+
+
+class Rating(BaseModel):
+    value: float
