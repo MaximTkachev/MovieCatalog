@@ -6,7 +6,7 @@ from starlette import status
 
 from .. import tables
 from movieCatalog.database import get_session
-from ..models.genres import GenreCreate
+from ..models.genres import GenreCreate, GenreEdit
 
 
 class GenreService:
@@ -45,3 +45,12 @@ class GenreService:
         genre = self.get_genre(genre_id=genre_id)
         self.session.delete(genre)
         self.session.commit()
+
+    def edit_genre(self, genre_id: int, genre_data: GenreEdit):
+        genre = self.get_genre(genre_id=genre_id)
+        for field, value in genre_data:
+            if value is not None:
+                setattr(genre, field, value)
+
+        self.session.commit()
+        return genre

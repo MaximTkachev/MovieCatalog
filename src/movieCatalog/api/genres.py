@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, Response, status
 
 from movieCatalog.models.auth import User
-from movieCatalog.models.genres import Genre, GenreCreate
+from movieCatalog.models.genres import Genre, GenreCreate, GenreEdit
 from movieCatalog.services.auth import get_current_user
 from movieCatalog.services.genres import GenreService
 
@@ -20,6 +20,16 @@ def create_genre(
         service: GenreService = Depends()
 ):
     return service.create(genre_data=genre_data)
+
+
+@router.put('/{genre_id}', response_model=Genre)
+def edit_genre(
+    genre_id: int,
+    genre_data: GenreEdit,
+    user: User = Depends(get_current_user),
+    service: GenreService = Depends()
+):
+    return service.edit_genre(genre_id=genre_id, genre_data=genre_data)
 
 
 @router.get('/', response_model=List[Genre])
