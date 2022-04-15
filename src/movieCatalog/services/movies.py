@@ -2,10 +2,11 @@ from typing import List
 
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 from starlette import status
 
 from movieCatalog.database import get_session
-from ..models.movies import MovieCreate
+from ..models.movies import MovieCreate, Rating
 from .. import tables
 
 
@@ -16,9 +17,9 @@ class MovieService:
     def create_movie(self, movie_data: MovieCreate) -> tables.Movie:
         list_of_genres = (
             self.session
-            .query(tables.Genre)
-            .filter(tables.Genre.id.in_(movie_data.genres))
-            .all()
+                .query(tables.Genre)
+                .filter(tables.Genre.id.in_(movie_data.genres))
+                .all()
         )
 
         movie = tables.Movie(
@@ -47,10 +48,27 @@ class MovieService:
 
         return movie
 
+    def get_rating_of_movie(self, movie_id) -> Rating:
+        rating = (
+            self.session
+                .query(func.avg(tables.Review.rating))
+                .filter_by(movieId=movie_id)
+                .first()
+        )
+
+        if rating[0] is None:
+            value = 0
+        else:
+            value = rating[0]
+
+        return Rating(
+            value=value
+        )
+
     def get_movies(self, name_template: str) -> List[tables.Movie]:
         movies = (
             self.session
-            .query(tables.Movie)
+                .query(tables.Movie)
         )
 
         if name_template:
@@ -63,4 +81,3 @@ class MovieService:
         movie = self.get_movie(movie_id=movie_id)
         self.session.delete(movie)
         self.session.commit()
-
