@@ -1,7 +1,6 @@
-from pydantic import BaseModel
+from typing import Optional
 
-from movieCatalog.models.auth import User
-from movieCatalog.models.movies import Movie
+from pydantic import BaseModel
 
 
 class ReviewBase(BaseModel):
@@ -18,3 +17,8 @@ class Review(ReviewBase):
 
 class CreateReview(ReviewBase):
     pass
+
+
+class ReviewUpdate(BaseModel):
+    reviewText: Optional[str]
+    rating: Optional[int]
