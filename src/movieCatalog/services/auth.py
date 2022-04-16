@@ -86,6 +86,24 @@ class AuthService:
         self.session = session
 
     def register_new_user(self, user_data: UserCreate) -> Token:
+        user_check = (
+            self.session
+            .query(tables.User)
+            .filter(tables.User.username == user_data.username)
+            .first()
+        )
+        if user_check:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User with the same username already exists")
+
+        user_check = (
+            self.session
+            .query(tables.User)
+            .filter(tables.User.email == user_data.email)
+            .first()
+        )
+        if user_check:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User with the same email already exists")
+
         user = tables.User(
             username=user_data.username,
             email=user_data.email,
