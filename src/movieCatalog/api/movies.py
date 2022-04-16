@@ -3,7 +3,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Response, status
 
 from ..models.auth import User
-from ..models.movies import MovieCreate, Movie, Rating
+from ..models.movies import MovieCreate, Movie, Rating, MovieEdit
 from ..services.auth import get_current_user
 from ..services.movies import MovieService
 
@@ -44,6 +44,16 @@ def get_rating_of_movie(
         service: MovieService = Depends()
 ):
     return service.get_rating_of_movie(movie_id=movie_id)
+
+
+@router.put('/{movie_id}', response_model=Movie)
+def edit_movie(
+        movie_data: MovieEdit,
+        movie_id: int,
+        user: User = Depends(get_current_user),
+        service: MovieService = Depends()
+):
+    return service.edit_movie(movie_id=movie_id, movie_data=movie_data)
 
 
 @router.delete('/{movie_id}')

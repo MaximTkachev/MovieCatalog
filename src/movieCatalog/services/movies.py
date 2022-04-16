@@ -6,7 +6,7 @@ from sqlalchemy.sql import func
 from starlette import status
 
 from movieCatalog.database import get_session
-from ..models.movies import MovieCreate, Rating
+from ..models.movies import MovieCreate, Rating, MovieEdit
 from .. import tables
 
 
@@ -81,3 +81,12 @@ class MovieService:
         movie = self.get_movie(movie_id=movie_id)
         self.session.delete(movie)
         self.session.commit()
+
+    def edit_movie(self, movie_id: int, movie_data: MovieEdit) -> tables.Movie:
+        movie = self.get_movie(movie_id=movie_id)
+        for field, value in movie_data:
+            if value is not None:
+                setattr(movie, field, value)
+
+        self.session.commit()
+        return movie
