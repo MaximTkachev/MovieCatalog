@@ -25,6 +25,26 @@ class UserService:
         return user
 
     def edit_user(self, user_id: int, user_data: UserEdit) -> UserData:
+        user_check = (
+            self.session
+            .query(tables.User)
+            .filter(tables.User.username == user_data.username,
+                    tables.User.id != user_id)
+            .first()
+        )
+        if user_check:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User with the same username already exists")
+
+        user_check = (
+            self.session
+            .query(tables.User)
+            .filter(tables.User.email == user_data.email,
+                    tables.User.id != user_id)
+            .first()
+        )
+        if user_check:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User with the same email already exists")
+
         user = self.get_user_as_table(user_id=user_id)
         for field, value in user_data:
             if value is not None:
